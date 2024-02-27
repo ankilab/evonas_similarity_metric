@@ -1,1 +1,7 @@
 # Sequence Alignment-based Similarity Metric in Evolutionary Neural Architecture Search
+
+## Abstract
+Neural Architecture Search (NAS) has emerged as a powerful method for automating the design of deep neural networks across diverse applications, with evolutionary optimization showing particular promise in addressing its intricate demands. However, the effectiveness of this approach highly depends on balancing exploration and exploitation, ensuring that the search does not prematurely converge to suboptimal solutions while still achieving near-optimal outcomes.
+This paper addresses this challenge by proposing a novel similarity metric inspired by global sequence alignment from biology. Unlike most of the existing methods that require pre-trained models for comparison, our metric operates directly on neural network architectures within the defined search space, eliminating the need for model training. We outline the computation of the normalized similarity metric and demonstrate its application in quantifying diversity within populations in evolutionary NAS. Experimental results conducted on popular datasets for image classification, such as CIFAR-10, CIFAR-100, and ImageNet16-120, show the effectiveness of our approach in guiding diversity based on our suggested control function. Additionally, we highlight the usefulness of our similarity metric in comparing individuals to identify advantageous or disadvantageous architectural design choices.
+
+## Installation

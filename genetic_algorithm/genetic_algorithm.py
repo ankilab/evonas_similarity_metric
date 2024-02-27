@@ -122,26 +122,27 @@ class GeneticAlgorithm:
             raise Exception("All models are too big in terms of file size. Therefore none of the generated models will"
                             " be further evaluated. Think about adjusting your GA parameters.")
 
-    def train_neural_networks(self):
+    def train_neural_networks(self, n_parallel):
         with open(f'{self.my_saver.results_dir}/Generation_{self.generation_counter}/preselected.txt', 'w') as file:
             # Write each element of the list to a new line
             for item in self.preselected_individuals:
                 file.write("%s\n" % item)
         # train all neural networks
         # --> start several training processes here
-        min_free_space = self.params['min_free_space_gpu']
         procs = []
         idx = 0
 
-        nvidia_smi.nvmlInit()
-        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(0)
-        n_training=math.ceil(len(self.preselected_individuals)/5)
+        if self.params["gpu"]:
+            nvidia_smi.nvmlInit()
+            handle = nvidia_smi.nvmlDeviceGetHandleByIndex(0)
+        n_training=math.ceil(len(self.preselected_individuals)/n_parallel)
         while idx < len(self.preselected_individuals):
             procs = [p for p in procs if p.poll() is None]
-            info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
-            ic(idx)
-            ic(info.free)
-            if info.free > min_free_space and len(procs)<=5:
+            if self.params["gpu"]:
+                info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
+                ic(idx)
+                ic(info.free)
+            if  len(procs)<=n_parallel:
                 command = 'python genetic_algorithm/src/train.py ' + \
                             f'--results_dir {self.my_saver.results_dir} ' + \
                             f'--gen_dir Generation_{self.generation_counter} ' + \
@@ -167,7 +168,8 @@ class GeneticAlgorithm:
             except Exception as e:
                 print(f"Error waiting for process: {e}")
 
-        nvidia_smi.nvmlShutdown()
+        if self.params["gpu"]:
+            nvidia_smi.nvmlShutdown()
     def selection(self):
         # calculate fitness of all preselected models
         path = f'{self.my_saver.results_dir}/Generation_{self.generation_counter}/'
@@ -255,7 +257,7 @@ class GeneticAlgorithm:
             while random_name in self.individuals_names:  # --> make sure that the random name does not already exist
                 random_name = generate_slug(2).replace("-", "_")
             self.individuals_names.append(random_name)
-    def check_accuracy_and_inference_time(self, generation):
+    def check_accuracy_and_inference_time(self, generation, n_parallel):
         #root_folder="/data/pa94xuro/sequence_alignment/Results/ga_20231014-104814_random_training_speech_12_2D_wo_sim"
         #preselected_individuals=[f.name for f in os.scandir(f'{root_folder}/Generation_{str(generation)}') if f.is_dir()]
         def load_tf_model(path):
@@ -285,16 +287,16 @@ class GeneticAlgorithm:
         while idx < len(untrained_models):
             procs = [p for p in procs if p.poll() is None]
             ic("untrained model: ",untrained_models[idx])
-            if len(procs)<=5:
+            if len(procs)<=n_parallel:
                 command = 'python genetic_algorithm/src/train.py ' + \
                             f'--results_dir {self.my_saver.results_dir} ' + \
                             f'--gen_dir Generation_{self.generation_counter} ' + \
-                            f'--individual_dir ' + ' '.join(untrained_models[idx:idx+int(len(untrained_models)/5)+1])+' '+ \
+                            f'--individual_dir ' + ' '.join(untrained_models[idx:idx+int(len(untrained_models)/n_parallel)+1])+' '+ \
                             f'--nb_epochs {self.params["nb_epochs"]} ' + \
                             f'--dataset {self.params["dataset"]} ' + \
                             f'--classes_filter ' + ' '.join(str(i) for i in self.params["classes_filter"])
                 procs.append(Popen(command, shell=True))
-                idx += int(len(untrained_models)/5)+1
+                idx += int(len(untrained_models)/n_parallel)+1
             #else:
                 #for p in procs[:2]:
                 #    p.wait()

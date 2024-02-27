@@ -11,6 +11,7 @@ import numpy as np
 import time
 from icecream import ic
 import json
+import sys
 
 warnings.simplefilter('ignore')
 
@@ -19,66 +20,36 @@ def load_params(filename):
         params = json.load(f)
     return params
 
-params = load_params("params.json")
-
-#################################
-# define which dataset and experiment to use (--> adjust it in train.py and add more datasets there)
-#################################DATASETS#####################################
-#DATASETS = ["cifar10", "cifar100", "imagenet16-120"]
-
-#EXPERIMENT = "paper_cifar10_s4_e1_d100_40mb_div"
-
-#CLASSES_FILTER = []  # containing all classes that should be used for optimization
-#SEED=4
-np.random.seed(int(params["seed"]))
-tf.random.set_seed(int(params["seed"]))
-# select what dataset to use --> make sure the data loader is defined in datasets/get_datasets.py
-#DATASET = DATASETS[2]
-
-#################################
-# define EvoNAS hyper-parameters
-#################################
-#NB_GENERATIONS = 20
-#POPULATION_SIZE = 25
-#NB_BEST_MODELS_CROSSOVER = 5  # specifies the number of models that will be used for crossover
-#MUTATION_RATE = 20  # in percent
-
-#MAX_NB_FEATURE_LAYERS = 20  # max number layers before GAP, GMP or Flatten layer in the first generation
-#MAX_NB_CLASSIFICATION_LAYERS = 2  # max number layers after GAP, GMP or Flatten layer in the first generation
-
-#PATH_GENE_POOL = "genetic_algorithm/src/models_structure/gene_pool.txt"
-#PATH_RULE_SET = "genetic_algorithm/src/models_structure/rule_set.txt"
-
-
-######################################
-# define DNN training hyper-parameters
-######################################
-#NB_EPOCHS = 12
-#MIN_FREE_SPACE_GPU = 5000000000  # 6 GB
-
-#################################
-# define constraints
-#################################
-#MAX_MEMORY_FOOTPRINT=40000000 #in Bytes (800000 bytes --> 40 MB)
-#CONTROL_DIVERSITY=True
-#SOFT_CONTROL=False
-
-if params["dataset"]=="cifar10":    
-    params["input_shape"] = (32,32,3)
-    params["nb_classes"] = 10
-    params["classes_filter"]=list(range(10))
-elif params["dataset"]=="cifar100":
-    params["input_shape"] = (32,32,3)
-    params["nb_classes"] = 100
-    params["classes_filter"]=list(range(100))
-elif params["dataset"]=="imagenet16-120":
-    params["input_shape"] = (16,16,3)
-    params["nb_classes"] = 120
-    params["classes_filter"]=list(range(120))
 
 
 def main(continue_from=None):
     #tf.keras.backend.clear_session()
+    if len(sys.argv) == 1:
+        params = load_params("params.json")
+    else:
+        params_str=sys.argv[1]
+        params=json.loads(params_str)
+    
+    params["EXPERIMENT"]=f'{params["dataset"]}_s{params["seed"]}_p{params["population_size"]}_d{int(params["diversity_control"])}_f{int(params["soft_control"])}'
+    np.random.seed(int(params["seed"]))
+    tf.random.set_seed(int(params["seed"]))
+    print(params)
+    if params["dataset"]=="cifar10":    
+        params["input_shape"] = (32,32,3)
+        params["nb_classes"] = 10
+        params["classes_filter"]=list(range(10))
+    elif params["dataset"]=="cifar100":
+        params["input_shape"] = (32,32,3)
+        params["nb_classes"] = 100
+        params["classes_filter"]=list(range(100))
+    elif params["dataset"]=="imagenet16-120":
+        params["input_shape"] = (16,16,3)
+        params["nb_classes"] = 120
+        params["classes_filter"]=list(range(120))
+
+    ###### Start Evolutionary NAS #####################
+
+
     gpus = tf.config.list_physical_devices('GPU')
     try:
         for gpu in gpus:
@@ -123,10 +94,10 @@ def main(continue_from=None):
         alignment.align_sequences(chromosomes=my_ga.population_genotype, results_dir=str(my_ga.my_saver.results_dir), individuals_name=my_ga.individuals_names, generation=i_generation, from_folder=False)
 
         # train all neural networks
-        my_ga.train_neural_networks()
+        my_ga.train_neural_networks(params["parallel_processes"])
 
         # Check that all the models were trained correctly, train again models that don´t have a reported fitness score.
-        my_ga.check_accuracy_and_inference_time(i_generation)
+        my_ga.check_accuracy_and_inference_time(i_generation, params["parallel_processes"])
 
 
         # determine the fitness for each model and select the best ones
