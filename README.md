@@ -39,7 +39,7 @@ This paper addresses this challenge by proposing a novel similarity metric inspi
 You're ready to use the project within the virtual environment.
 
 ## Code structure
-
+```batch
 project-root/
 │
 ├── docs/
@@ -50,7 +50,7 @@ project-root/
 ├── requirements.txt
 ├── README.md
 └── LICENSE
-
+```
 
 ## Visualize paper results
 
