@@ -54,10 +54,31 @@ You're ready to use the project within the virtual environment.
 ├── rule_set.txt
 ```
 
-## Visualize paper results
-In order to plot in dash all the study results that are saved in dashboard/Results folder as .evonas files you have to run:
+## Visualizing Paper Results
+To visualize the results presented in the paper, which are saved in dashboard/Results folder as .evonas files, execute the following command in your terminal:
     ```batch
     python .\dashboard\dashboard.py
-It will take almost a minute to load all the data and then a window in the browser will open. If it does not open you have to open the following URL http://127.0.0.1:8040/evo_nas/.
+This process may take nearly a minute to load all the data. Once completed, a new browser window will open automatically. If it doesn't, you can access the dashboard via the URL http://127.0.0.1:8040/evo_nas/.
 ## Run Evolutionary NAS 
+If you wish to conduct a new study on Evolutionary NAS or replicate one of the existing ones, follow these instructions:
 
+1. **Modify Parameters**: Adjust the parameters in the params.json file according to your requirements.
+2. **Execute the Command**: Run the following command in your terminal:
+    ```batch
+    python main.py
+
+Ensure that you set **gpu=True** if you are using GPU and adjust the number of parallel_processes to optimize training times. For instance, in our experiments, we utilized an A100 80GB GPU and trained 5 models simultaneously.
+
+3. **Linux Compatibility**: You can also create or run scripts in Linux with predefined parameters. For example, to execute CIFAR-10 with rigid diversity control and seed 1, use the following script:
+    ```batch
+    ./scripts/run_evo_nas_cifar10_seed_1_div.sh
+To execute Naive CIFAR-10 and seed 1, use the following script:
+    ```batch
+    ./scripts/run_evo_nas_cifar10_seed_1_naive.sh
+To execute CIFAR-10 and seed 1 with soft diversity control, use the following script:
+    ```batch
+    ./scripts/run_evo_nas_cifar10_seed_1_div_soft.sh
+
+You can create new scripts or modify existing ones to run experiments with CIFAR100 and IMAGENET16-120 datasets as well. Ensure the parameters are appropriately set for your experiments.
+
+By following these steps, you can effectively visualize our paper results and conduct new studies on Evolutionary NAS.
