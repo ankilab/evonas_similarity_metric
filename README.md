@@ -43,8 +43,7 @@ Our repository is divided in 3 main sections:
 1. **Dashboard**
 This section is dedicated to visualizing results.
 
-Results: Contains saved study results.
-dashboard.py: Script for running the dashboard.
+**Results** Contains saved paper results and  **dashboard.py** the Script for running the dashboard.
 ```batch
 ├── dashboard/
 │   ├── Results/
@@ -85,7 +84,7 @@ If you wish to conduct a new study on Evolutionary NAS or replicate one of the e
    ```batch
    python main.py
    ```
-Ensure that you set **gpu=True** in the params file if you are using GPU and adjust the number of parallel_processes to optimize training times. For instance, in our experiments, we utilized an A100 80GB GPU and trained 5 models simultaneously.
+Ensure that you set **gpu=True** in the params file if you are using GPU and adjust the number of parallel_processes to optimize training times. For instance, in our experiments, we utilized an A100 80GB GPU and trained 5 models simultaneously.After the algorithm completes its execution, it generates an *.evonas* file within the Results folder corresponding to the study. To visualize these results, it is essential to manually transfer this file to the **dashboard/Results folder**.
 
 3. **Linux Compatibility**: You can also create or run scripts in Linux with predefined parameters. For example, to execute CIFAR-10 with rigid diversity control and seed 1, use the following script:
    ```batch
