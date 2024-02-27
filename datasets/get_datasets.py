@@ -131,15 +131,6 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
         ds_train = ds_train.map(lambda image, label: (image, tf.one_hot(label, num_classes)))
         ds_test = ds_test.map(lambda image, label: (image, tf.one_hot(label, num_classes)))
 
-        # Calculate the number of examples for training and validation after filtering
-        #num_examples = ds_train.reduce(np.int64(0), lambda x, _: x + 1).numpy()
-        #num_train_examples = int(0.8 * num_examples)  # 80% for training
-        #num_val_examples = num_examples - num_train_examples  # 20% for validation
-
-        # Split the 'train' dataset into training and validation sets
-        # ds_train = ds_train.shuffle(buffer_size=num_examples, reshuffle_each_iteration=True)
-        #ds_val = ds_train.skip(num_train_examples).take(num_val_examples)
-        #ds_train = ds_train.take(num_train_examples)
 
         def augment_data(image, label):
             # Random horizontal flip
@@ -154,10 +145,7 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
             return image, label
 
         ds_train=ds_train.map(augment_data)
-        # Display the number of examples in each set
-        #print(f"Number of training examples: {num_train_examples}")
-        #print(f"Number of validation examples: {num_val_examples}")
-        #print(f"Number of test examples: {ds_test.reduce(np.int64(0), lambda x, _: x + 1).numpy()}")
+
         ds_val=ds_test
         return ds_train, ds_val, ds_test
     elif dataset=="cifar100":
@@ -166,7 +154,7 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
             data_dir='datasets/',
             split=['train', 'test'],
             as_supervised=True,
-            download=False,
+            download=True,
             with_info=False
         )
         if len(classes_filter) != 0:
@@ -181,15 +169,6 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
         ds_train = ds_train.map(lambda image, label: (image, tf.one_hot(label, num_classes)))
         ds_test = ds_test.map(lambda image, label: (image, tf.one_hot(label, num_classes)))
 
-        # Calculate the number of examples for training and validation after filtering
-        #num_examples = ds_train.reduce(np.int64(0), lambda x, _: x + 1).numpy()
-        #num_train_examples = int(0.8 * num_examples)  # 80% for training
-        #num_val_examples = num_examples - num_train_examples  # 20% for validation
-
-        # Split the 'train' dataset into training and validation sets
-        # ds_train = ds_train.shuffle(buffer_size=num_examples, reshuffle_each_iteration=True)
-        #ds_val = ds_train.skip(num_train_examples).take(num_val_examples)
-        #ds_train = ds_train.take(num_train_examples)
 
         def augment_data(image, label):
             # Random horizontal flip
@@ -204,10 +183,7 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
             return image, label
 
         ds_train=ds_train.map(augment_data)
-        # Display the number of examples in each set
-        #print(f"Number of training examples: {num_train_examples}")
-        #print(f"Number of validation examples: {num_val_examples}")
-        #print(f"Number of test examples: {ds_test.reduce(np.int64(0), lambda x, _: x + 1).numpy()}")
+
         ds_val=ds_test
         return ds_train, ds_val, ds_test
 
@@ -217,7 +193,7 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
             data_dir='datasets/',
             split=['train', 'validation'],
             as_supervised=True,
-            download=False,
+            download=True,
             with_info=False
         )
         if len(classes_filter) != 0:
@@ -249,10 +225,7 @@ def get_datasets(dataset, samples=6_000, classes_filter=None):
             return image, label
 
         ds_train=ds_train.map(augment_data)
-        # Split the 'train' dataset into training and validation sets
-        #ds_val = ds_val.shuffle(buffer_size=6000, reshuffle_each_iteration=True)
-        #ds_test = ds_val.skip(num_val_examples).take(num_test_examples)
-        #ds_val = ds_val.take(num_val_examples)
+
         ds_test=ds_val
         return ds_train, ds_val, ds_test
     

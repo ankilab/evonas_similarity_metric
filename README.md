@@ -5,3 +5,54 @@ Neural Architecture Search (NAS) has emerged as a powerful method for automating
 This paper addresses this challenge by proposing a novel similarity metric inspired by global sequence alignment from biology. Unlike most of the existing methods that require pre-trained models for comparison, our metric operates directly on neural network architectures within the defined search space, eliminating the need for model training. We outline the computation of the normalized similarity metric and demonstrate its application in quantifying diversity within populations in evolutionary NAS. Experimental results conducted on popular datasets for image classification, such as CIFAR-10, CIFAR-100, and ImageNet16-120, show the effectiveness of our approach in guiding diversity based on our suggested control function. Additionally, we highlight the usefulness of our similarity metric in comparing individuals to identify advantageous or disadvantageous architectural design choices.
 
 ## Installation
+
+### Setting up Virtual Environment
+
+#### Windows
+
+1. Open Command Prompt (`cmd`) or Git Bash.
+2. Navigate to your project directory.
+3. Create a virtual environment:
+   ```batch
+   python -m venv .venv
+4. Activate the virtual environment:
+   ```batch
+   .venv\Scripts\activate
+5. Install dependencies from requirements.txt:
+   ```batch
+   pip install -r requirements.txt
+
+#### Linux
+
+1. Open Terminal.
+2. Navigate to your project directory.
+3. Create a virtual environment:
+   ```batch
+   python3 -m venv .venv
+4. Activate the virtual environment:
+   ```batch
+   source .venv/bin/activate
+5. Install dependencies from requirements.txt:
+   ```batch
+   pip install -r requirements.txt
+
+You're ready to use the project within the virtual environment.
+
+## Code structure
+
+project-root/
+│
+├── docs/
+│
+├── src/
+├── tests/
+│
+├── requirements.txt
+├── README.md
+└── LICENSE
+
+
+## Visualize paper results
+
+## Run Evolutionary NAS 
+
