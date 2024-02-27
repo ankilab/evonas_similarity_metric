@@ -39,25 +39,42 @@ This paper addresses this challenge by proposing a novel similarity metric inspi
 You're ready to use the project within the virtual environment.
 
 ## Code structure
-```batch
+Our repository is divided in 3 main sections: 
+1. **Dashboard**
+This section is dedicated to visualizing results.
 
+Results: Contains saved study results.
+dashboard.py: Script for running the dashboard.
+```batch
 ├── dashboard/
 │   ├── Results/
 │   ├── dashboard.py
+```
+**2. Datasets and Genetic Algorithm**
+This section handles datasets used in the experiments comprises genetic algorithm functions for running evolutionary NAS from main.py.
+```
 ├── datasets/
 ├── genetic_algorithm/
+├── main.py
+```
+
+**3. nnalignment**
+Handles computation of similarity scores, which uses its config.json file to load the gene_pool.txt that defines our search space. 
+```batch
 ├── nnalignment/
 │   ├── config.json
 │   ├── example/
+```
+rule_set.txt defines individuals macrostructure and params.json the dataset (CIFAR10,CIFAR100,IMAGENET16-120) and other parameters to run main.py in NAS algorithm.
+```batch
 ├── params.json
 ├── gene_pool.txt
 ├── rule_set.txt
 ```
-
 ## Visualizing Paper Results
 To visualize the results presented in the paper, which are saved in dashboard/Results folder as .evonas files, execute the following command in your terminal:
-    ```batch
-    python .\dashboard\dashboard.py
+   ```batch
+   python .\dashboard\dashboard.py
 
 This process may take nearly a minute to load all the data. Once completed, a new browser window will open automatically. If it doesn't, you can access the dashboard via the URL http://127.0.0.1:8040/evo_nas/.
 ## Run Evolutionary NAS 
@@ -65,20 +82,22 @@ If you wish to conduct a new study on Evolutionary NAS or replicate one of the e
 
 1. **Modify Parameters**: Adjust the parameters in the **params.json** file according to your requirements.
 2. **Execute the Command**: Run the following command in your terminal:
-    ```batch
-    python main.py
+   ```batch
+   python main.py
 
 Ensure that you set **gpu=True** in the params file if you are using GPU and adjust the number of parallel_processes to optimize training times. For instance, in our experiments, we utilized an A100 80GB GPU and trained 5 models simultaneously.
 
 3. **Linux Compatibility**: You can also create or run scripts in Linux with predefined parameters. For example, to execute CIFAR-10 with rigid diversity control and seed 1, use the following script:
-    ```batch
-    ./scripts/run_evo_nas_cifar10_seed_1_div.sh
+   ```batch
+   ./scripts/run_evo_nas_cifar10_seed_1_div.sh
+
 To execute Naive CIFAR-10 and seed 1, use the following script:
-    ```batch
-    ./scripts/run_evo_nas_cifar10_seed_1_naive.sh
+   ```batch
+   ./scripts/run_evo_nas_cifar10_seed_1_naive.sh
+    
 To execute CIFAR-10 and seed 1 with soft diversity control, use the following script:
-    ```batch
-    ./scripts/run_evo_nas_cifar10_seed_1_div_soft.sh
+   ```batch
+   ./scripts/run_evo_nas_cifar10_seed_1_div_soft.sh
 
 You can create new scripts or modify existing ones to run experiments with CIFAR100 and IMAGENET16-120 datasets as well. Ensure the parameters are appropriately set for your experiments.
 
