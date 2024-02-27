@@ -40,19 +40,24 @@ You're ready to use the project within the virtual environment.
 
 ## Code structure
 ```batch
-project-root/
-│
-├── docs/
-│
-├── src/
-├── tests/
-│
-├── requirements.txt
-├── README.md
-└── LICENSE
+
+├── dashboard/
+│   ├── Results/
+│   ├── dashboard.py
+├── datasets/
+├── genetic_algorithm/
+├── nnalignment/
+│   ├── config.json
+│   ├── example/
+├── params.json
+├── gene_pool.txt
+├── rule_set.txt
 ```
 
 ## Visualize paper results
-
+In order to plot in dash all the study results that are saved in dashboard/Results folder as .evonas files you have to run:
+    ```batch
+    python .\dashboard\dashboard.py
+It will take almost a minute to load all the data and then a window in the browser will open. If it does not open you have to open the following URL http://127.0.0.1:8040/evo_nas/.
 ## Run Evolutionary NAS 
 

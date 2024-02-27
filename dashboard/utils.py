@@ -3,6 +3,7 @@ from difflib import SequenceMatcher
 from suffix_tree import Tree
 import json
 import numpy as np
+from io import StringIO
 
 def fasta_to_dict(fasta_file_path):
     fasta_dict = {}
@@ -60,8 +61,8 @@ def get_lists(file_path, test_name):
     results=read_json(file_path)
     ngens=len(results.keys())-1
     ####################### Best individuals ###################
-    best_individuals=pd.read_json(results["total"]["df_best_individuals"])
-    best_sim_df=pd.read_json(results["total"]["sim_best"])
+    best_individuals=pd.read_json(StringIO(results["total"]["df_best_individuals"]))
+    best_sim_df=pd.read_json(StringIO(results["total"]["sim_best"]))
 
     best_individuals_sequences_dict={}
     for individual in best_individuals.Name:
@@ -100,7 +101,7 @@ def get_lists(file_path, test_name):
     ######################## Parameters #########################
     parameters=results["total"]["params"]
     ########################## Similarity matrix ###################
-    df_list= [pd.read_json(results[f'Generation_{gen}']["similarity"]).rename(columns={"Unnamed: 0":"index"}).set_index("index") for gen in range(1,ngens+1)]
+    df_list= [pd.read_json( StringIO(results[f'Generation_{gen}']["similarity"])).rename(columns={"Unnamed: 0":"index"}).set_index("index") for gen in range(1,ngens+1)]
     ########################### Alignments ###############
     alignment_dict=[results[f'Generation_{gen}']["alignment"] for gen in range(1,ngens+1)]
     ########################### val accuracy / epochs ###################

@@ -525,16 +525,13 @@ def register_callbacks(app, df_list, alignment_dicts, results_dicts, df_results_
                 hovermode='closest',
                 #height=500+1*(cols-10),  # Set the height of the heatmap (in pixels)
                 #width=500+1*(cols-10),   # Set the width of the heatmap (in pixels)
-                height=500,  # Set the height of the heatmap (in pixels)
-                width=500,  
+                height=600,  # Set the height of the heatmap (in pixels)
+                width=600,  
             )
 
             fig.update_xaxes(showticklabels=False, title_text=f'Generation {slider}', title_font=dict(size=25))
             fig.update_yaxes(showticklabels=False, title='')
-            if slider!=20:
-                fig.update_layout(coloraxis_showscale=False, margin=dict(l=2, r=2, t=40, b=5))
-            else:
-                fig.update_layout( margin=dict(l=2, r=2, t=5, b=5),  coloraxis_colorbar=dict(len=0.75))
+            fig.update_layout( margin=dict(l=10, r=10, t=10, b=10),  coloraxis_colorbar=dict(len=0.75))
                 #color_axis = fig['data'][0]['coloraxis']
                 #new_fig = go.Figure(layout={'coloraxis': color_axis})
                 #new_fig.write_image(f'images/axis_{slider}.svg')

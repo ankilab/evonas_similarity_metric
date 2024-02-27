@@ -11,3 +11,4 @@ tensorflow-datasets==4.9.4
 tensorflow-addons
 flammkuchen
 matplotlib
+suffix-tree==0.1.2

@@ -6,7 +6,7 @@ from utils import get_lists
 from callbacks import register_callbacks
 import webbrowser
 
-Results_folder="Results"
+Results_folder="dashboard/Results"
 TRANSLATION={
      "STFT":"P",
     "C_2D":"C",
@@ -26,7 +26,7 @@ TRANSLATION={
 }
 TRANSLATION_COLUMNS= [{'name': col, 'id': col} for col in TRANSLATION.keys()]
 # Load DataFrame from CSV file
-app = dash.Dash(__name__, suppress_callback_exceptions=True, assets_folder="assets")
+app = dash.Dash(__name__, suppress_callback_exceptions=True, assets_folder="assets", url_base_pathname="/evo_nas/")
 
 ##########################################
 df_list, alignment_dicts,results_dicts,df_results_dict,val_acc_dict, parameters, best_individuals, best_sim_df,sequences_best, bad_design_dfs, dfs_good_cases_best_layers={},{},{},{},{},{},{},{},{},{},{}
@@ -35,6 +35,7 @@ tests=[]
 files=[{dir[19:-7]:f"{Results_folder}/{dir}"} for dir in os.listdir(Results_folder) if ".evonas" in dir]
 
 for study in files:
+    print(f"Loading {study}")
     name=list(study.items())[0][0]
     path=list(study.items())[0][1]
     df_list[name], alignment_dicts[name],  results_dicts[name], df_results_dict[name], val_acc_dict[name], parameters[name], best_individuals[name],best_sim_df[name], sequences_best[name], bad_design_dfs[name], dfs_good_cases_best_layers[name]=get_lists(path,name)
@@ -44,9 +45,10 @@ register_callbacks(app, df_list, alignment_dicts, results_dicts, df_results_dict
 ###################################################################
 
 app.layout = html.Div([
-    html.H1(f'EvoNAS results',  className="MainTitle"),
+    html.H1(f'Evolutionary NAS results',  className="MainTitle"),
     html.Br(),
-    html.Button('Show/Hide Params', id='button-params',className="ButtonTable", n_clicks=0),
+    html.Button('Show/Hide training params', id='button-params',className="ButtonTable", n_clicks=0),
+    html.Br(),
     html.Div(id='table-container', className="TableContainer", children=[
         dash_table.DataTable(
             id='table-params',
@@ -57,6 +59,7 @@ app.layout = html.Div([
         )
     ]),
     html.Br(),
+    html.H3("Metric to sort heatmaps and to select following plot"),
     dcc.Dropdown(['name', 'fitness', 'val_acc', 'inference_time','memory_footprint_h5'], 'fitness', id='sort', searchable=True),
     html.Br(),       
 
@@ -88,13 +91,15 @@ app.layout = html.Div([
     ])], className="DropdownsBox"),
     ###################
     html.Br(),
+    ################## scatter plot generations ###########################
+    html.Div(id='box-plots-total', className="PaperPlots"),
     ################## Standard deviation plot acc ###########################
     html.Div(id='std-median-plot-acc', className="PaperPlots"),
     ################## Standard deviation plot ###########################
     html.Div(id='std-median-plot', className="PaperPlots"),
-    ################## scatter plot generations ###########################
-    html.Div(id='box-plots-total', className="PaperPlots"),
+
     ################### Similarity distributions ###########################
+    html.H3("Similarity distribution and pareto front for First test"),
     html.Br(),
     dcc.Tabs(id='tabs-example-0', value='tab-0', children=[
         dcc.Tab(label='Distributions', value='tab-0'),
@@ -103,8 +108,10 @@ app.layout = html.Div([
     html.Div(id='tabs-content-0'),
 
     ############################### Similarity of best individuals ##################
+    html.H3("Similarity among Top individuals accross generations for each test"),
     html.Div(id='heatmaps-best'),
     ################### Sequences best individuals #######################################
+    html.H3("Alignment chart of top individuals for each generation, for First test"),
     html.Div(children=[dashbio.AlignmentChart(
         id="sequences-best",
         data="ABCD",
@@ -112,9 +119,11 @@ app.layout = html.Div([
         height=900,
             )]),
     ######################## Table bad design changes ############
+    html.H3("Click to explore examples of pairs of individuals exhibiting both high similarity and significant differences in fitness, for First test"),
     html.Button('Show/Hide wrong design', id='button-design-wrong', className="ButtonTable", n_clicks=0),
+    html.H3("Click to explore examples of most repeated layers and blocks for the Top individuals, for First test"),
     html.Div(id='table-design-wrong-container', className="TableContainer"),
-    
+    html.Br(),
     ######################## Table good design changes ############
     html.Button('Show/Hide good design', id='button-design-good', className="ButtonTable", n_clicks=0),
     html.Div(id='table-design-good-container', className="TableContainer", children=[
@@ -132,6 +141,7 @@ app.layout = html.Div([
     
     ###############################################################
     html.Br(),
+    html.H3("Select generation for plotting its similarity matrix"),
     dcc.Slider(min=1, step=1, value=1,marks=None, id='slider',updatemode="drag",tooltip={"placement": "bottom", "always_visible": True} ),
 
     dcc.Tabs(id='tabs-example-1', value='tab-1', children=[
@@ -139,21 +149,24 @@ app.layout = html.Div([
         dcc.Tab(label='Distribution', value='tab-2'),
         dcc.Tab(label='Clustergram', value='tab-0')
     ]),
+
     html.Div(id='tabs-content-1'),
-    html.H2('Select number of models', className="MainTitle"),
+    html.H2('Select number of models and threshold to filter heatmap'),
     dcc.Input(
             id="number", type="number",
-            debounce=False, placeholder="Number of models",min=0, step=10, className="InputNumber"),
+            debounce=False, placeholder="Number of models",min=5, step=5,value=25, className="InputNumber"),
     dcc.Input(
             id="number-thres", type="number",
             debounce=False, placeholder="Number of models",min=-1,max=1, value=0, step=0.05,className="InputNumber"),
     html.H2('Iteration', className="MainTitle"),
 
+    html.H3("Click on points in the Heatmap to visualize alignments and results of pairs of individuals"),
     dcc.Tabs(id='tabs-example-2', value='tab-6', children=[
         dcc.Tab(label='Sequence aligned', value='tab-6'),
     ]),
     html.Div(id='tabs-content-2'),
 
+    html.H3("Group tests to visualize grouped seeds fitness score and similarity"),
     ################### Dropdowns ###################
     html.Div([
     html.Div(className="DropdownContainer",children=[
@@ -189,8 +202,8 @@ app.layout = html.Div([
 
 ])
 def main():
-    webbrowser.open("http://127.0.0.1:8040")   
-    app.run_server(debug=False, port=8040)
+    webbrowser.open("http://127.0.0.1:8040/evo_nas/")   
+    app.run_server(debug=False, port=8040 )
 
 
 if __name__ == '__main__':
