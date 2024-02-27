@@ -1,0 +1,19 @@
+ {
+  "EXPERIMENT": "paper_cifar10_s4_e1_d100_40mb_div",
+  "results_path":"/home/woody/iwb3/iwb3021h/sequence_alignment/sequence_alignment/Results",
+  "dataset": "cifar10",
+  "generations": 20,
+  "population_size": 25,
+  "nb_best_models_crossover": 5,
+  "mutation_rate": 20, 
+  "max_nb_feature_layers": 20,
+  "max_nb_classification_layers": 2,
+  "path_gene_pool": "gene_pool.txt",
+  "path_rule_set": "rule_set.txt",
+  "nb_epochs": 12,
+  "min_free_space_gpu": 5000000000,
+  "max_memory_footprint": 40000000,
+  "seed": 1,
+  "diversity_control": true,
+  "soft_control": false
+  }

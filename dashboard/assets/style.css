@@ -1,0 +1,102 @@
+/*##### General layout ##### */
+.MainTitle {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+  }
+.InputNumber {
+    text-align: center;
+    margin: auto;
+    width: 10%;
+  }
+.ButtonTable {
+    margin: auto;
+    width: 30%;
+    background-color:rgb(127, 180, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+.TableContainer {
+    text-align: center;
+    margin: auto;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+.DropdownContainer {
+    display: inline-block;
+    width: 90%;
+  }
+.DropdownsBox {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+  }
+
+.Dropdown {
+    width: 100%}
+
+/*#### Tables ##### */
+#table-params {
+    margin: auto;
+    width: 20%;
+}
+#table-params td {
+    text-align: left;
+}
+
+#table-design-good {
+    margin: auto;
+    width: 80%;
+}
+#table-design-good td {
+    text-align: center;
+}
+/*
+#table-design-wrong {
+    margin: auto;
+    width: 50%;
+}*/
+#table-design-wrong td {
+    text-align: center;
+}
+
+#results_table {
+    width: 50%; 
+    margin: 0 auto
+}
+
+#results_table th { /* Table header */
+    background-color: rgb(230, 230, 230);
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+}
+
+#results_table td {
+    text-align: center;
+    font-size: 18px;
+}
+
+
+/*####### Plots ####### */
+.PaperPlots {
+    width: 100%;
+    height: auto;
+    margin: auto;
+  }
+
+#heatmaps-best {
+    display:flex; 
+    gap:10px}
+
+#tabs-content-1 {
+    margin: auto;
+    width: 50%;
+  }

@@ -1,0 +1,20 @@
+{
+ "gene_pool": "genetic_algorithm/src/models_structure/gene_pool.txt",
+ "char_dict": {
+    "STFT":"P",
+   "C_2D":"C",
+   "DC_2D":"D",
+   "MP_2D":"M",
+   "AP_2D":"A",
+   "GAP_2D":"g",
+   "GMP_2D":"G",
+   "FLAT":"E",
+   "R_2D":"L",
+   "BN_2D":"B",
+   "IN_2D":"I",
+   "DO":"O",
+   "D":"F",
+   "RES_2D":"R",
+   "BOT_2D":"T"
+}
+}
