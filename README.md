@@ -1,1 +1,1 @@
-# evonas_similarity_metric
+# Sequence Alignment-based Similarity Metric in Evolutionary Neural Architecture Search
