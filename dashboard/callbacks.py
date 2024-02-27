@@ -131,93 +131,92 @@ def register_callbacks(app, df_list, alignment_dicts, results_dicts, df_results_
             return 1
 
     ########################### Median plots accuracy with shadows #########################
-    @app.callback(
-        Output('std-median-plot-acc', 'children'),
-        [Input("dropdown", "value"),
-        Input("dropdown-2","value")],
-        suppress_callback_exceptions=True
-    )
-    def std_plot_median_acc(drop, drop2):
-        # Sample data
-        gen=max(len(df_list[drop]),len(df_list[drop2]))
-        x_values = list(np.arange(1,gen+1,1))
-        y_values_line1=[]
-        std_dev_line1=[]
-        for i in range(len(df_list[drop])):
-            matrix = df_results_dict[drop][i]
-            matrix=matrix[((matrix.inference_time!=np.inf) & (matrix.fitness!=-10001.0)) ]["fitness"].values
-            y_values_line1.append(np.median(matrix))
-            std_dev_line1.append(np.round(np.std(matrix),3))
-        #print(std_dev_line1)
-        #y_values_line1 = [np.median(mat) for mat in df_list[drop]]
-        #std_dev_line1 = [1, 2, 1.5, 1, 3]
-        y_values_line2=[]
-        std_dev_line2=[]
-        for i in range(len(df_list[drop2])):
-            matrix = df_results_dict[drop2][i]
-            matrix=matrix[((matrix.inference_time!=np.inf) & (matrix.fitness!=-10001.0)) ]["fitness"].values
-            y_values_line2.append(np.median(matrix))
-            std_dev_line2.append(np.round(np.std(matrix),3))
+    #@app.callback(
+    #    Output('std-median-plot-acc', 'children'),
+    #    [Input("dropdown", "value"),
+    #    Input("dropdown-2","value")],
+    #    suppress_callback_exceptions=True
+    #)
+    #def std_plot_median_acc(drop, drop2):
+    #    # Sample data
+    #    gen=max(len(df_list[drop]),len(df_list[drop2]))
+    #    x_values = list(np.arange(1,gen+1,1))
+    #    y_values_line1=[]
+    #    std_dev_line1=[]
+    #    for i in range(len(df_list[drop])):
+    #        matrix = df_results_dict[drop][i]
+    #        matrix=matrix[((matrix.inference_time!=np.inf) & (matrix.fitness!=-10001.0)) ]["fitness"].values
+    #        y_values_line1.append(np.median(matrix))
+    #        std_dev_line1.append(np.round(np.std(matrix),3))
+    #    #print(std_dev_line1)
+    #    #y_values_line1 = [np.median(mat) for mat in df_list[drop]]
+    #    #std_dev_line1 = [1, 2, 1.5, 1, 3]
+    #    y_values_line2=[]
+    #    std_dev_line2=[]
+    #    for i in range(len(df_list[drop2])):
+    #        matrix = df_results_dict[drop2][i]
+    #        matrix=matrix[((matrix.inference_time!=np.inf) & (matrix.fitness!=-10001.0)) ]["fitness"].values
+    #        y_values_line2.append(np.median(matrix))
+    #        std_dev_line2.append(np.round(np.std(matrix),3))#
 
-        #print(std_dev_line2)
-        #y_values_line2 = [8, 12, 10, 14, 18]
-        #std_dev_line2 = [0.5, 1, 0.8, 0.7, 1.5]
 
         # Create a line plot
-        fig = go.Figure()
+    #    fig = go.Figure()
 
         # Add the first line trace
-        fig.add_trace(go.Scatter(
-            x=x_values,
-            y=y_values_line1,
-            mode='lines',
-            name=f'{drop} median fitness',
-            line=dict(color='rgb(255,0,0)')
+    #    fig.add_trace(go.Scatter(
+    #        x=x_values,
+    #        y=y_values_line1,
+    #        mode='lines',
+    #        name=f'{drop} median fitness',
+    #        line=dict(color='rgb(255,0,0)')#
 
-        ))
+    #    ))
 
         # Add the shaded area for standard deviation for Line 1
-        fig.add_trace(go.Scatter(
-            x=x_values + x_values[::-1],
-            y=[y - std_dev for y, std_dev in zip(y_values_line1, std_dev_line1)] +
-            [y + std_dev for y, std_dev in zip(y_values_line1[::-1], std_dev_line1[::-1])],
-            fill='toself',
-            fillcolor='rgba(217,121,123,0.2)',
-            line=dict(color='rgba(255,255,255,0)'),
-            name=f'Std dev {drop}'
-        ))
+    #    fig.add_trace(go.Scatter(
+    #        x=x_values + x_values[::-1],
+    #        y=[y - std_dev for y, std_dev in zip(y_values_line1, std_dev_line1)] +
+    #        [y + std_dev for y, std_dev in zip(y_values_line1[::-1], std_dev_line1[::-1])],
+    #        fill='toself',
+    #        fillcolor='rgba(217,121,123,0.2)',
+    #        line=dict(color='rgba(255,255,255,0)'),
+    #        name=f'Std dev {drop}'
+    #    ))
 
         # Add the second line trace
-        fig.add_trace(go.Scatter(
-            x=x_values,
-            y=y_values_line2,
-            mode='lines',
-            name=f'{drop2} median fitness',
-            line=dict(color='rgb(144,143,161)')
-        ))
+    #    fig.add_trace(go.Scatter(
+    #        x=x_values,
+    #        y=y_values_line2,
+    #        mode='lines',
+    #        name=f'{drop2} median fitness',
+    #        line=dict(color='rgb(144,143,161)'),
+    #        #legend=False
+   # #    ))
 
         # Add the shaded area for standard deviation for Line 2
-        fig.add_trace(go.Scatter(
-            x=x_values + x_values[::-1],
-            y=[y - std_dev for y, std_dev in zip(y_values_line2, std_dev_line2)] +
-            [y + std_dev for y, std_dev in zip(y_values_line2[::-1], std_dev_line2[::-1])],
-            fill='toself',
-            fillcolor='rgba(152,151,166,0.2)',
-            line=dict(color='rgba(255,255,255,0)'),
-            name=f'Std dev {drop2}'
-        ))
+    #    fig.add_trace(go.Scatter(
+    #        x=x_values + x_values[::-1],
+    #        y=[y - std_dev for y, std_dev in zip(y_values_line2, std_dev_line2)] +
+    #        [y + std_dev for y, std_dev in zip(y_values_line2[::-1], std_dev_line2[::-1])],
+    #        fill='toself',
+    #        fillcolor='rgba(152,151,166,0.2)',
+    #        line=dict(color='rgba(255,255,255,0)'),
+    #        name=f'Std dev {drop2}',
+            #legend=False
+    #    ))
 
         # Update layout for better visualization
-        fig.update_layout(
-            title='Population fitness per generation',
-            xaxis_title='Generation',
-            yaxis_title='Fitness',
-            template="presentation", 
-            showlegend=True
-        )
-        fig.update_layout(xaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'),
-                                yaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'))
-        return dcc.Graph(figure=fig, style={"width":"100%", "height":"100%"})
+    #    fig.update_layout(
+    #        title='Population fitness per generation',
+    #        xaxis_title='Generation',
+    #        yaxis_title='Fitness',
+    #        template="presentation", 
+    #        showlegend=True
+    #    )
+    #    fig.update_layout(xaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'),
+    #                            yaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'))
+    #    return dcc.Graph(figure=fig, style={"width":"100%", "height":"100%"})
 
     ########################### Median plots similarity with shadows #########################
     @app.callback(
@@ -323,25 +322,25 @@ def register_callbacks(app, df_list, alignment_dicts, results_dicts, df_results_
         df_total=pd.concat(df_results_dict[drop])
         df_total=df_total[df_total.inference_time!=np.inf]
         df_total["Generation"]=df_total["Generation"].astype(str)  
-        fig_box = px.box(df_total, x='Generation',points="suspectedoutliers", y=sort, title=f"{sort} distribution Over Generations")
-        fig_box.update_traces(marker_color='blue',name=f'{drop} distribution',showlegend=True,visible='legendonly',opacity=0.7)
+        #fig_box = px.box(df_total, x='Generation',points="suspectedoutliers", y=sort, title=f"{sort} distribution Over Generations")
+        #fig_box.update_traces(marker_color='blue',name=f'{drop} distribution',showlegend=True,visible='legendonly',opacity=0.7)
         # Create a boxplot for study2
         df_total2=pd.concat(df_results_dict[drop2])
         df_total2=df_total2[df_total2.inference_time!=np.inf]
         df_total2["Generation"]=df_total2["Generation"].astype(str)  
-        fig_box2 = px.box(df_total2, x='Generation',points="suspectedoutliers", y=sort, title=f"{sort} distribution Over Generations")
-        fig_box2.update_traces(marker_color='#EF6262',name=f'{drop2} distribution',showlegend=True,visible='legendonly',opacity=0.7)
+        #fig_box2 = px.box(df_total2, x='Generation',points="suspectedoutliers", y=sort, title=f"{sort} distribution Over Generations")
+        #fig_box2.update_traces(marker_color='#EF6262',name=f'{drop2} distribution',showlegend=True,visible='legendonly',opacity=0.7)
 
         df_total["Generation"]=df_total["Generation"].astype(int)  
         df_total2["Generation"]=df_total2["Generation"].astype(int)  
         # Create a lineplot of max accuracy for each study
-        fig_line = px.line(df_total[["Generation", sort]].groupby("Generation").max().reset_index(), x='Generation', y=sort
-                        , title=f"Max {sort} Comparison",markers=True)
-        fig_line.update_traces(line=dict(color='#0D1282'), name=f'{drop} max {sort}', showlegend=True, visible='legendonly')
+        #fig_line = px.line(df_total[["Generation", sort]].groupby("Generation").max().reset_index(), x='Generation', y=sort
+        #                , title=f"Max {sort} Comparison",markers=True)
+        #fig_line.update_traces(line=dict(color='#0D1282'), name=f'{drop} max {sort}', showlegend=True, visible='legendonly')
         # Max of study 2
-        fig_line2 = px.line(df_total2[["Generation", sort]].groupby("Generation").max().reset_index(), x='Generation', y=sort
-                        , title=f"Max {sort} Comparison", markers=True)
-        fig_line2.update_traces(line=dict(color='#900C3F'), name=f'{drop2} max {sort}', showlegend=True, visible='legendonly')
+        #fig_line2 = px.line(df_total2[["Generation", sort]].groupby("Generation").max().reset_index(), x='Generation', y=sort
+        #                , title=f"Max {sort} Comparison", markers=True)
+        #fig_line2.update_traces(line=dict(color='#900C3F'), name=f'{drop2} max {sort}', showlegend=True, visible='legendonly')
 
         fig_line3 = px.line(best_individuals[drop], x='Generation', y=sort
                         , title=f"Best models {sort} Comparison", markers=True, hover_data="Name")
@@ -352,36 +351,36 @@ def register_callbacks(app, df_list, alignment_dicts, results_dicts, df_results_
         fig_line4.update_traces(line=dict(color='#0D1282'), name=f'{drop2} best model {sort}', showlegend=True)
 
         # Create subplots with one row and two columns
-        fig_combined = make_subplots(rows=1, cols=1, subplot_titles=[f'{sort} Distribution Over Generations'])
+        fig_combined = make_subplots(rows=1, cols=1, subplot_titles=[f'{sort} for best individuals'])
 
         # Add box plots to the first subplot
-        for trace in fig_box.data:
-            fig_combined.add_trace(trace, row=1, col=1)
+        #for trace in fig_box.data:
+        #    fig_combined.add_trace(trace, row=1, col=1)
 
-        for trace in fig_box2.data:
-            fig_combined.add_trace(trace, row=1, col=1)
+        #for trace in fig_box2.data:
+        #    fig_combined.add_trace(trace, row=1, col=1)
 
         # Add line plot to the second subplot
-        for trace in fig_line.data:
-            fig_combined.add_trace(trace, row=1, col=1)
-        for trace in fig_line2.data:
-            fig_combined.add_trace(trace, row=1, col=1)
+        #for trace in fig_line.data:
+        #    fig_combined.add_trace(trace, row=1, col=1)
+        #for trace in fig_line2.data:
+        #    fig_combined.add_trace(trace, row=1, col=1)
         for trace in fig_line3.data:
             fig_combined.add_trace(trace, row=1, col=1)
         for trace in fig_line4.data:
             fig_combined.add_trace(trace, row=1, col=1)
         # Update layout
-        fig_combined.update_layout(template="presentation", showlegend=True)
+        fig_combined.update_layout(template="presentation", showlegend=True, title=f"{sort} of best individuals")
         fig_combined.update_layout(xaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'),
                                 yaxis=dict(showgrid=True, gridwidth=1, gridcolor='lightgray'))
-        if sort=="inference_time":
-            fig_combined.update_yaxes(range=[0, 10])
-        elif sort=="val_acc":
-            fig_combined.update_yaxes(range=[0, 1])
-        elif sort=="fitness":
-            fig_combined.update_yaxes(range=[0, 1])
-        elif sort=="memory_footprint_h5":
-            fig_combined.update_yaxes(range=[0, 5000000])
+        #if sort=="inference_time":
+        #    fig_combined.update_yaxes(range=[0, 10])
+        #elif sort=="val_acc":
+        #    fig_combined.update_yaxes(range=[0, 1])
+        #elif sort=="fitness":
+        #    fig_combined.update_yaxes(range=[0, 1])
+        #elif sort=="memory_footprint_h5":
+        #    fig_combined.update_yaxes(range=[0, 5000000])
         fig_combined.update_xaxes(type="category")
         fig_combined.update_layout()
 

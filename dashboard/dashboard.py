@@ -94,7 +94,7 @@ app.layout = html.Div([
     ################## scatter plot generations ###########################
     html.Div(id='box-plots-total', className="PaperPlots"),
     ################## Standard deviation plot acc ###########################
-    html.Div(id='std-median-plot-acc', className="PaperPlots"),
+    #html.Div(id='std-median-plot-acc', className="PaperPlots"),
     ################## Standard deviation plot ###########################
     html.Div(id='std-median-plot', className="PaperPlots"),
 
@@ -160,7 +160,7 @@ app.layout = html.Div([
             debounce=False, placeholder="Number of models",min=-1,max=1, value=0, step=0.05,className="InputNumber"),
     html.H2('Iteration', className="MainTitle"),
 
-    html.H3("Click on points in the Heatmap to visualize alignments and results of pairs of individuals"),
+    html.H3("Click on points in the Heatmap to visualize alignment, results and training history of pairs of individuals"),
     dcc.Tabs(id='tabs-example-2', value='tab-6', children=[
         dcc.Tab(label='Sequence aligned', value='tab-6'),
     ]),
