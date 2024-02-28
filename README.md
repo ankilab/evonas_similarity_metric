@@ -77,6 +77,8 @@ To visualize the results presented in the paper, which are saved in dashboard/Re
    python .\dashboard\dashboard.py
    ```
 This process may take nearly a minute to load all the data. Once completed, a new browser window will open automatically. If it doesn't, you can access the dashboard via the URL http://127.0.0.1:8040/evo_nas/. In this dashboard, you can compare the evolution of fitness and similarity between two studies. Additionally, you can analyze detailed similarity matrices and the evolution of diversity within one of the studies. 
+
+Each test is named according to the dataset, followed by the seed number, and whether diversity control is applied. For instance, a test for CIFAR100 with seed 1 is denoted as *cifar100_s1*, while one with diversity control is labeled as *cifar100_s1_div*.
 ## Run Evolutionary NAS 
 If you wish to conduct a new study on Evolutionary NAS or replicate one of the existing ones, follow these instructions:
 
