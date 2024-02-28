@@ -6,8 +6,9 @@ This paper addresses this challenge by proposing a novel similarity metric inspi
 
 ## Installation
 
-### Setting up Virtual Environment
 
+### Setting up Virtual Environment
+Python >= 3.10.11 is required for this repository
 #### Windows
 
 1. Open Command Prompt (`cmd`) or Git Bash.
